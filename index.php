@@ -1,3 +1,49 @@
+<?php
+session_start();
+?>
+<?php
+
+$login = 0;
+$invalid = 0;
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+   include 'connect.php';
+
+
+
+   $email = $_POST['email'];
+   $pwd1 = $_POST['pwd1'];
+
+
+
+   $sql = "Select * from `signup` where email='$email'
+       
+		and pwd1='$pwd1'";
+   $result = mysqli_query($conn, $sql);
+   $fetch = mysqli_fetch_array($result);
+   if ($result) {
+      $num = mysqli_num_rows($result);
+      if ($num > 0) {
+         //echo "Logging successfully";
+         $fullname = $fetch['fullname'];
+         $login = 1;
+         $_SESSION['fullname'] = $fullname;
+         if ($email == "admin@admin.com") {
+            header('location:adminevents.php');
+         } else {
+            header('location:home.php');
+         }
+      } else {
+
+         //echo "INVALID DATA";
+         $invalid = 1;
+      }
+   }
+}
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -76,18 +122,18 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
                         <a href="index.html" class="nav-item nav-link active">Home</a>
-                        <a href="#" class="nav-item nav-link">About</a>
-                        <a href="#" class="nav-item nav-link">Services</a>
+                        <a href="about.html" class="nav-item nav-link">About</a>
+                        <a href="service.html" class="nav-item nav-link">Services</a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Products</a>
                             <div class="dropdown-menu m-0">
-                                <a href="#" class="dropdown-item">Games[toys]</a>
-                                <a href="#" class="dropdown-item">kitchen Products</a>
-                                <a href="#" class="dropdown-item">Indoor Products</a>
-                                <a href="#" class="dropdown-item">Outdoor Products</a>
+                                <a href="appointment.html" class="dropdown-item">Games[toys]</a>
+                                <a href="feature.html" class="dropdown-item">kitchen Products</a>
+                                <a href="blog.html" class="dropdown-item">Indoor Products</a>
+                                <a href="team.html" class="dropdown-item">Outdoor Products</a>
                             </div>
                         </div>
-                        <a href="#" class="nav-item nav-link">Contact Us</a>
+                        <a href="contact.html" class="nav-item nav-link">Contact Us</a>
                     </div>
                     <a href="#" class="btn btn-primary rounded-pill text-white py-2 px-4 flex-wrap flex-sm-shrink-0">Recycle Here</a>
                 </div>
@@ -266,7 +312,7 @@
                         <div class="about-img pb-5 ps-5">
                             <img src="img/about-1.jpg" class="img-fluid rounded w-100" style="object-fit: cover;" alt="Image">
                             <div class="about-img-inner">
-                               <!-- <img src="" class="img-fluid rounded-circle w-100 h-100" alt="Image">-->
+                                <img src="img/about-2.jpg" class="img-fluid rounded-circle w-100 h-100" alt="Image">
                             </div>
                             <div class="about-experience"> Green day, Clean day
 
@@ -293,17 +339,19 @@
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.2">
                         <div class="section-title text-start">
-                            <h4 class="sub-title pe-3 mb-0">Solutions To Your Plastic Pain</h4>
+                            <h4 class="sub-title pe-3 mb-0">Solutions To Your Pain</h4>
                             <h1 class="display-4 mb-4">Best Quality Services With Minimal Pain Rate</h1>
                             <p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat deleniti amet at atque sequi quibusdam cumque itaque repudiandae temporibus, eius nam mollitia voluptas maxime veniam necessitatibus saepe in ab? Repellat!</p>
                             <div class="row g-4">
                                 <div class="col-sm-6">
                                     <div class="d-flex flex-column h-100">
                                         <div class="mb-4">
-                                            
+                                            <h5 class="mb-3"><i class="fa fa-check text-primary me-2"></i> Body Relaxation</h5>
+                                            <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et deserunt qui cupiditate veritatis enim ducimus.</p>
                                         </div>
                                         <div class="mb-4">
-                                            
+                                            <h5 class="mb-3"><i class="fa fa-check text-primary me-2"></i> Body Relaxation</h5>
+                                            <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et deserunt qui cupiditate veritatis enim ducimus.</p>
                                         </div>
                                         <div class="text-start mb-4">
                                             <a href="#" class="btn btn-primary rounded-pill text-white py-3 px-5">More Details</a>
@@ -313,7 +361,7 @@
                                 <div class="col-sm-6">
                                     <div class="video h-100">
                                         <img src="img/video-img.jpg" class="img-fluid rounded w-100 h-100" style="object-fit: cover;" alt="">
-                                        <button type="button" class="btn btn-play" data-bs-toggle="modal" data-src="https://youtu.be/TGqfFmH1yqc?si=MEuJmsuV6o5wglqt" data-bs-target="videoModal">
+                                        <button type="button" class="btn btn-play" data-bs-toggle="modal" data-src="https://www.youtube.com/embed/DWRcNpR6Kdc" data-bs-target="#videoModal">
                                             <span></span>
                                         </button>
                                     </div>
@@ -325,7 +373,7 @@
                         <div class="appointment-form rounded p-5">
                             <p class="fs-4 text-uppercase text-primary">Get In Touch</p>
                             <h1 class="display-5 mb-4">Register Now !!!</h1>
-                            <form action="REQUEST.php" method="POST">
+                            <form>
                                 <div class="row gy-3 gx-4">
                                     <div class="col-xl-6">
                                         <input type="text" class="form-control py-3 border-primary bg-transparent text-white" placeholder="First Name">
@@ -377,6 +425,81 @@
             </div>
         </div>
         <!-- Book Appointment End -->
+
+
+        <!-- Team Start -->
+        <div class="container-fluid team py-5">
+            <div class="container py-5">
+                <div class="section-title mb-5 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="sub-style">
+                        <h4 class="sub-title px-3 mb-0">Meet our team</h4>
+                    </div>
+                    <h1 class="display-3 mb-4">Physiotherapy Services from Professional Therapist</h1>
+                    <p class="mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat deleniti amet at atque sequi quibusdam cumque itaque repudiandae temporibus, eius nam mollitia voluptas maxime veniam necessitatibus saepe in ab? Repellat!</p>
+                </div>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="team-item rounded">
+                            <div class="team-img rounded-top h-100">
+                                <img src="img/team-1.jpg" class="img-fluid rounded-top w-100" alt="">
+                                <div class="team-icon d-flex justify-content-center">
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-twitter"></i></a>
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                                </div>
+                            </div>
+                            <div class="team-content text-center border border-primary border-top-0 rounded-bottom p-4">
+                                <h5>Full Name</h5>
+                                <p class="mb-0">Message Physio Therapist</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="team-item rounded">
+                            <div class="team-img rounded-top h-100">
+                                <img src="img/team-2.jpg" class="img-fluid rounded-top w-100" alt="">
+                                <div class="team-icon d-flex justify-content-center">
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-twitter"></i></a>
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                                </div>
+                            </div>
+                            <div class="team-content text-center border border-primary border-top-0 rounded-bottom p-4">
+                                <h5>Full Name</h5>
+                                <p class="mb-0">Rehabilitation Therapist</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.5s">
+                        <div class="team-item rounded">
+                            <div class="team-img rounded-top h-100">
+                                <img src="img/team-3.jpg" class="img-fluid rounded-top w-100" alt="">
+                                <div class="team-icon d-flex justify-content-center">
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-twitter"></i></a>
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-square btn-primary text-white rounded-circle mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                                </div>
+                            </div>
+                            <div class="team-content text-center border border-primary border-top-0 rounded-bottom p-4">
+                                <h5>Full Name</h5>
+                                <p class="mb-0">Doctor of Physical therapy</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                            <div class="team-content text-center border border-primary border-top-0 rounded-bottom p-4">
+                                <h5>Full Name</h5>
+                                <p class="mb-0">Doctor of Physical therapy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Team End -->
          <!--pop -->
          <!-- Popup Form -->
     <div id="popupForm" class="popup-form">
@@ -423,8 +546,10 @@
                             <h4 class="mb-4 text-white">Quick Links</h4>
                             <a href=""><i class="fas fa-angle-right me-2"></i> About Us</a>
                             <a href=""><i class="fas fa-angle-right me-2"></i> Contact Us</a>
-                            <a href="https://www.youtube.com/embed/TGqfFmH1yqc?si=XY2nkm2Z5U8E_yiB"><i class="fas fa-angle-right me-2"></i> Our Blog & News</a>
-
+                            <a href=""><i class="fas fa-angle-right me-2"></i> Privacy Policy</a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i> Terms & Conditions</a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i> Our Blog & News</a>
+                            <a href=""><i class="fas fa-angle-right me-2"></i> Our Team</a>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-6 col-xl-3">
